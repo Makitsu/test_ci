@@ -13,14 +13,13 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-
 class FooServiceTest {
 
-
+    // Inject Mocks -> Spring bean injection
     @InjectMocks
     private FooService fooService;
 
-
+    // JUNIT 5
     @BeforeAll
     static void beforeAll() {
         System.out.println("Before all test methods");
@@ -41,7 +40,6 @@ class FooServiceTest {
         System.out.println("After all test methods");
     }
 
-
     @ParameterizedTest
     @ValueSource(ints = {1, 3, 5, -3, 15, Integer.MAX_VALUE}) // six numbers
     void isOdd_ShouldReturnTrueForOddNumbers(int number) {
@@ -52,6 +50,7 @@ class FooServiceTest {
     @Test
     void lambdaExpressions() {
         List<Integer> numbers = Arrays.asList(1, 2, 3);
+
         assertTrue(numbers.stream()
                 .mapToInt(Integer::intValue)
                 .sum() > 5, () -> "Sum should be greater than 5");
@@ -69,9 +68,9 @@ class FooServiceTest {
 
     @Test
     void shouldThrowException() {
-        Throwable exception = assertThrows(UnsupportedOperationException.class, () -> {
-            throw new UnsupportedOperationException("Not supported");
-        });
+
+        UnsupportedOperationException exception = assertThrows(UnsupportedOperationException.class, () -> fooService.throwException());
+
         assertEquals("Not supported", exception.getMessage());
     }
 
@@ -94,10 +93,10 @@ class FooServiceTest {
     @TestFactory
     Stream<DynamicTest> dynamicTestsFromStream() {
         return in.stream()
-                .map(word ->
-                        DynamicTest.dynamicTest("Test translate " + word, () -> {
-                            int id = in.indexOf(word);
-                            assertEquals(out.get(id), fooService.timesTwo(word));
+                .map(value ->
+                        DynamicTest.dynamicTest("Test translate " + value, () -> {
+                            int id = in.indexOf(value);
+                            assertEquals(out.get(id), fooService.timesTwo(value));
                         })
                 );
     }

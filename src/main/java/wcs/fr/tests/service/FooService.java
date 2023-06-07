@@ -12,4 +12,9 @@ public class FooService {
     public Integer timesTwo(Integer val) {
         return val * 2;
     }
+
+
+    public void throwException(){
+        throw new UnsupportedOperationException("Not supported");
+    }
 }
